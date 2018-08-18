@@ -1,0 +1,45 @@
+8.	R version 3.5.0 (2018-04-23) -- "Joy in Playing"
+9.	Copyright (C) 2018 The R Foundation for Statistical Computing
+10.	Platform: x86_64-w64-mingw32/x64 (64-bit)
+11.	
+12.	R is free software and comes with ABSOLUTELY NO WARRANTY.
+13.	You are welcome to redistribute it under certain conditions.
+14.	Type 'license()' or 'licence()' for distribution details.
+15.	
+16.	R is a collaborative project with many contributors.
+17.	Type 'contributors()' for more information and
+18.	'citation()' on how to cite R or R packages in publications.
+19.	
+20.	Type 'demo()' for some demos, 'help()' for on-line help, or
+21.	'help.start()' for an HTML browser interface to help.
+22.	Type 'q()' to quit R.
+23.	
+24.	> library(readxl)
+25.	> FRB_Broad_Real_Dollar_Index <- read_excel("C:/Users/jtuch/Desktop/FRB Broad Real Dollar Index.xlsx")
+26.	> View(FRB_Broad_Real_Dollar_Index)
+27.	> na.omit(FRB_Broad_Real_Dollar_Index)
+28.	# A tibble: 7,036 x 3
+29.	       a      b      c
+30.	   <dbl>  <dbl>  <dbl>
+31.	 1    5   856.  -125. 
+32.	 2    0     0    -12.7
+33.	 3    0  1782.  -163. 
+34.	 4 1941. 7696.  -903. 
+35.	 5   74   904    -78.0
+36.	 6    0    80.3 -348. 
+37.	 7    0   122      0  
+38.	 8    0   188.   -41.8
+39.	 9 1063. 1130.     0  
+40.	10    0    53.5   16.3
+41.	# ... with 7,026 more rows
+42.	> fit <- lm(a~b + c)
+43.	Error in eval(predvars, data, env) : object 'a' not found
+44.	> fit <- lm(a~ b + c, FRB_Broad_Real_Dollar_Index)
+45.	> fit
+46.	
+47.	Call:
+48.	lm(formula = a ~ b + c, data = FRB_Broad_Real_Dollar_Index)
+49.	
+50.	Coefficients:
+51.	(Intercept)            b            c  
+52.	 -8521.2347       1.1762      -0.2743  
