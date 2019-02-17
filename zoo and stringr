@@ -1,0 +1,46 @@
+library(dplyr)
+library(zoo)
+library(stringr)
+
+#Question 1: Load both data sets
+data = read.csv("C:/Users/david/OneDrive/Documents/Super Data Science/Case studies/Case study 046/data.csv")
+incorrect_data = read.csv("C:/Users/david/OneDrive/Documents/Super Data Science/Case studies/Case study 046/incorrect_data.csv")
+
+#Quesiton 2: The data in âincorrect_dataâ are false readings which are also in the main data set.
+#Remove these entries from the main data set
+str(data)
+str(incorrect_data)
+incorrect_data$Year = as.character(incorrect_data$Year)
+data$Year = as.character(data$Year)
+data = data %>%
+  anti_join(incorrect_data)
+
+#Question 3: Ensure all data is in title format with each word starting with a capital letter (e.g. âNew Zealandâ not âNew zealandâ)
+data = data %>%
+  mutate(Country.or.Area = str_to_title(Country.or.Area))
+
+#Question 4: Replace âOfâ with âofâ and âAndâ with âandâ
+data = data %>%
+  mutate(Country.or.Area = str_replace(Country.or.Area, 'Of', 'of')) %>% 
+  mutate(Country.or.Area = str_replace(Country.or.Area, 'And', 'and'))
+
+#Question 5: Extract the year from the âYearâ column
+data = data %>%
+  mutate(Year = str_extract(Year, '[0-9]+'))
+
+#Question 6: Format the new year variable as numeric
+data$Year = as.numeric(data$Year)
+
+#Question 7: Sort data by country and year
+data = data %>% 
+  arrange(Country.or.Area, Year)
+
+#Question 8: Add the 3 year rolling mean for each country
+data = data %>% 
+  group_by(Country.or.Area) %>% 
+  mutate(avg_value_l3yr = rollmean(Value, 3, fill = NA, align = 'left'))
+
+#Question 9: Which country had the highest 3 year rolling mean rainfall in 2012?
+head(data %>%
+       filter(Year == 2012) %>% 
+       arrange(desc(avg_value_l3yr)))
